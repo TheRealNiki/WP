@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Songs Homepage - Welcome to My Music Store</title>
+  <style type="text/css">
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .flex {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 20px;
+    }
+
+    form, ul, table {
+      width: 45%;
+      margin: 10px;
+      text-align: left;
+    }
+
+    input[type="submit"], .button {
+      background-color: #336699;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    input[type="submit"]:hover, .button:hover {
+      background-color: #285280;
+    }
+
+    .delete-button {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 3px;
+      margin-right: 5px;
+    }
+
+    .delete-button:hover {
+      background-color: #a71d2a;
+    }
+
+    .edit-button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    .edit-button:hover {
+      background-color: #0056b3;
+    }
+
+    .center-button {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .album-select-container {
+      margin-bottom: 20px;
+    }
+
+    body > main > div.flex > form:nth-child(2) > div {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Welcome to My Music Store</h1>
+  <div th:if="${error}" style="color: red; font-weight: bold; margin-top: 10px;">
+    <span th:text="${error}"></span>
+  </div>
+</header>
+<main>
+  <h2>Choose a song:</h2>
+
+  <!-- Album Selection Dropdown -->
+  <div class="album-select-container">
+    <label for="albumSelect">Filter by Album:</label>
+    <select id="albumSelect" onchange="filterByAlbum()">
+      <option value="-1">All</option>
+      <option th:each="album : ${albums}" th:value="${album.id}" th:text="${album.name}"></option>
+    </select>
+  </div>
+
+  <div class="flex">
+    <!-- Existing Form -->
+    <form action="/artists/add-to-song" method="get">
+      <div th:each="song : ${songs}">
+        <input type="radio" name="songId" th:value="${song.id}" required />
+        <a th:href="'/songs/details/' + ${song.id}" th:text="${song.title}"></a>
+        , Album: <span style="color: #dc3545" th:text="${song.album.name}"></span>
+        , Genre: <span th:text="${song.genre}"></span>
+        , Release Year: <span th:text="${song.releaseYear}"></span>
+        <br/>
+      </div>
+      <input type="submit" value="Submit">
+    </form>
+
+    <!-- New Form for Delete and Edit -->
+    <form>
+      <div th:each="song : ${songs}">
+        <button th:formaction="'/songs/delete/' + ${song.id}" class="delete-button" method="post">Delete</button>
+        <button th:formaction="'/songs/edit/' + ${song.id}" class="edit-button" method="get">Edit</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Add New Song Button -->
+  <div class="center-button">
+    <a href="/songs/add-form" method="get" class="button">Add New Song</a>
+  </div>
+</main>
+
+<script>
+  function filterByAlbum() {
+    const selectedAlbumId = document.getElementById('albumSelect').value;
+    window.location.href = `/songs?albumId=${selectedAlbumId}`;
+  }
+</script>
+</body>
+</html>

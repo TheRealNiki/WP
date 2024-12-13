@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Add new Performer to Book</title>
+  <style type="text/css">
+    /*body {*/
+    /*  width: 800px;*/
+    /*  margin: auto;*/
+    /*}*/
+    table {
+      width: 100%;
+    }
+    table, td, th {
+      border: 1px solid black;
+      padding: 3px 2px;
+    }
+    section {
+      float: left;
+      margin: 0 1.5%;
+      width: 63%;
+    }
+    aside {
+      float: right;
+      margin: 0 1.5%;
+      width: 30%;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    header, main, section, aside {
+      text-align: center;
+    }
+
+    h1, h2 {
+      color: #336699;
+    }
+
+    form, ul, table {
+      width: 80%;
+      margin: auto;
+      text-align: left;
+    }
+
+    input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    input[type="submit"], .back-button {
+      background-color: #336699;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    input[type="submit"]:hover, .back-button:hover {
+      background-color: #285280;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Select the Artist to add to the List of Performers</h1>
+</header>
+<section>
+  <h2>Select artist:</h2>
+  <form action="/artists/add-to-song" method="post">
+    <div th:each="artist : ${artists}">
+      <input type="radio" name="artistId" th:value="${artist.id}"
+             th:text="${artist.firstName} + ' ' + ${artist.lastName}" required/> <br/>
+    </div>
+
+    <input type="hidden" name="songId" th:value="${songId}" />
+
+    <br/>
+    <input type="submit" value="Add artist">
+  </form>
+</section>
+<aside>
+  <table>
+    <tr>
+      <td><b>Song Id</b></td>
+      <!-- Displaying the songId value -->
+      <td th:text="${songId}"></td>
+    </tr>
+  </table>
+</aside>
+</body>
+</html>
